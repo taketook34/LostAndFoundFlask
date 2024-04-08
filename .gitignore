@@ -1,2 +1,3 @@
 lostfound/__pycache__
-lostfound/instance
+instance/*
+lostfound/static/uploads/*

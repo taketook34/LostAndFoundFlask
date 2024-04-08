@@ -1,15 +1,7 @@
 from lostfound import app, db
-
-from flask import Flask, render_template
-# app = Flask(__name__)
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///lost-found.db'
-# db = SQLAlchemy(app)
-
-
-
+from flask import Flask, render_template, send_from_directory
 from lostfound.models import Post
-
+import os
 
 
 @app.route('/')

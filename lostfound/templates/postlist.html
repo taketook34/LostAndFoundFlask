@@ -4,11 +4,11 @@
     {% for p in items %}
 
     <div class="post">
-        <!-- <a href="{{ p.get_absolute_url }}">
+        <a href="#">
             <div class="post-image">
-                <img src="{{ p.photo.url }}" alt="{{ p.name }}">
+                <img src="{{ url_for('static', filename='photos/' + p.photo) }}" alt="{{ p.name }}">
             </div>
-        </a> -->
+        </a>
         <div class="post-content">
             <div class="post-title">
                 <h2>{{ p.name }}</h2>
