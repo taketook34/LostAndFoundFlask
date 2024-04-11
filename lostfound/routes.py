@@ -1,7 +1,11 @@
 from lostfound import app, db
-from flask import Flask, render_template, send_from_directory, redirect, url_for
+
+from flask import Flask, render_template, send_from_directory, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.utils import secure_filename
+
 from lostfound.models import Post, User
-from lostfound.forms import RegisterForm, PostForm
+from lostfound.forms import RegisterForm, PostForm, LoginForm
 import os
 
 
@@ -19,6 +23,14 @@ def postlist_page():
   return render_template('postlist.html', items=posts)
 
 
+@app.route('/postlist/<post_id>')
+def onepost_page(post_id):
+  with app.app_context():
+    post_to_show = Post.query.filter_by(id=post_id).first()
+  
+  return render_template('showpost.html', post=post_to_show)
+
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -31,7 +43,7 @@ def register_page():
 
       db.session.add(user_to_create)
       db.session.commit()
-
+      login_user(user_to_create)
     return redirect(url_for('home_page'))
 
 
@@ -41,16 +53,56 @@ def register_page():
 
   return render_template('registerpage.html', form = form)
 
-@app.route('/addpost')
+@app.route('/addpost', methods=['GET', 'POST'])
+@login_required
 def addpost_page():
   form  = PostForm()
+  
+  if current_user.is_authenticated:
+    if form.validate_on_submit():
+      if form.photo.data:
+        filename = secure_filename(form.photo.data.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        form.photo.data.save(filepath)
 
+      with app.app_context():
+        post_to_create = Post(name=form.name.data,
+          description=form.description.data,
+          author_id=current_user.id,
+          photo=filename)
+        
+        db.session.add(post_to_create)
+        db.session.commit()
+
+  else:
+    flash('User are not authenticated! Please try again', category='danger')
+
+  # MAke post creating after login 
 
   return render_template('addpost.html', form = form)
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login_page():
-  return render_template('loginpage.html')
+  form = LoginForm()
+
+  if form.validate_on_submit():
+    attempted_user = User.query.filter_by(username=form.username.data).first()
+
+    if attempted_user and attempted_user.check_password(form.password.data):
+        login_user(attempted_user)
+        flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
+        return redirect(url_for('home_page'))
+    else:
+        flash('Username and password are not match! Please try again', category='danger')
+
+  return render_template('loginpage.html', form=form)
+
+@app.route('/logout')
+@login_required
+def logout_page():
+    logout_user()
+    flash("You have been logged out!", category='info')
+    return redirect(url_for("home_page"))
 
 @app.route('/contacts')
 def contacts_page():

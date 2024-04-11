@@ -4,7 +4,7 @@
     {% for p in items %}
 
     <div class="post">
-        <a href="#">
+        <a href="{{ url_for('onepost_page', post_id=p.id) }}">
             <div class="post-image">
                 <img src="{{ url_for('static', filename='photos/' + p.photo) }}" alt="{{ p.name }}">
             </div>

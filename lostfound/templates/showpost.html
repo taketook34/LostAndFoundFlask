@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+      <div class="single-post">
+        <div class="single-post-image">
+            <img src="{{ url_for('static', filename='photos/' + post.photo) }}" alt="{{ post.name }}">
+        </div>
+        <div class="single-post-content">
+            <div class="single-post-title">
+                <h2>{{ post.name }}</h2>
+            </div>
+            <div class="single-post-description">
+                <p>{{ post.description }}</p>
+            </div>
+            <div class="single-post-meta">
+                <span class="single-post-author">
+                    {{ post.author_name }}
+                </span>
+                <span class="single-post-date">
+                    {{ post.data }}
+                </span>
+            </div>
+        </div>
+
+        
+    </div>
+
+    
+{% endblock %}

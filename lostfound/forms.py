@@ -12,4 +12,9 @@ class PostForm(FlaskForm):
     name = wtforms.StringField(label='Title: ')
     description = wtforms.TextAreaField(label='Description: ')
     photo = wtforms.FileField(label='Photo: ')
-    submit = wtforms.SubmitField(label='Create Account')
+    submit = wtforms.SubmitField(label='Post')
+
+class LoginForm(FlaskForm):
+    username = wtforms.StringField(label='User Name:')
+    password = wtforms.PasswordField(label='Password:')
+    submit = wtforms.SubmitField(label='Log in')

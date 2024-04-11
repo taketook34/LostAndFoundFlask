@@ -12,10 +12,13 @@
         <a href="{{ url_for('home_page') }}">Головна</a>
         <a href="{{ url_for('contacts_page') }}">Про нас</a>
         <a href="{{ url_for('postlist_page') }}">Знахідки</a>
+        {% if current_user.is_authenticated %}
         <a href="{{ url_for('addpost_page') }}">Опублікувати</a>
+        <a href="{{ url_for('logout_page') }}">Вийти з аккаунту: {{ current_user.username }}</a>
+        {% else %}
         <a href="{{ url_for('register_page') }}">Реєстрація</a>
         <a href="{{ url_for('login_page') }}">Логін</a>
-        
+        {% endif %}        
     </div>
 
   {% block content %}
