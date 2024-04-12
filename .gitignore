@@ -1,3 +1,4 @@
 lostfound/__pycache__
 instance/*
 lostfound/static/photos/*
+migrations/__pycache__
