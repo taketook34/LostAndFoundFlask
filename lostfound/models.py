@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(60), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     posts_list = db.relationship('Post', backref="author_user", lazy=True)
-
+    is_staff = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
