@@ -19,4 +19,5 @@ admin = Admin(app)
 
 
 from lostfound import admins
-from lostfound import routes
+# from lostfound import routes # no need in this
+from lostfound import urls
