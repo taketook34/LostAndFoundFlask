@@ -4,8 +4,8 @@ from flask import Flask, render_template, send_from_directory, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 
-from lostfound.models import Post, User
-from lostfound.forms import RegisterForm, PostForm, LoginForm
+from lostfound.models import Post, User, FeedbackMessage
+from lostfound.forms import RegisterForm, PostForm, LoginForm, FeedbackMessageForm
 import os
 
 
@@ -128,8 +128,20 @@ def logout_page():
 
     # return redirect(url_for("home_page"))
 
-@app.route('/contacts')
+@app.route('/contacts', methods=['GET', 'POST'])
 def contacts_page():
+
+  form = FeedbackMessageForm()
+
+  if form.validate_on_submit():
+    email = form.email.data
+    text = form.text.data
+
+    # Сохранение сообщения в БД
+    new_message = FeedbackMessage(email=email, text=text)
+    db.session.add(new_message)
+    db.session.commit()
+    
 
   context = {
         "authors": [
@@ -140,7 +152,7 @@ def contacts_page():
         'page_title': 'Про нас',
 
     }
-  return render_template('contacts.html', data=context)
+  return render_template('contacts.html', data=context, form=form)
 
 
 

@@ -14,6 +14,27 @@
 
     <h1>Залишити коментар</h1>
 
+    <form action="#" method="post" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+
+      
+      <div class="form-group">
+          {{ form.email.label() }}
+          {{ form.email(placeholder="Email") }}
+      </div>
+    
+      <div class="form-group">
+          {{ form.text.label() }}
+          {{ form.text(placeholder="Message") }}
+      </div>
+    
+    
+      <div class="form-group">
+          {{ form.submit() }}
+      </div>
+
+  </form>
+
   </div>
     
 {% endblock %}

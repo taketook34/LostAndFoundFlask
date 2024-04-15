@@ -27,3 +27,8 @@ class LoginForm(FlaskForm):
     username = wtforms.StringField(label='User Name:')
     password = wtforms.PasswordField(label='Password:')
     submit = wtforms.SubmitField(label='Log in')
+
+class FeedbackMessageForm(FlaskForm):
+    email = wtforms.EmailField("Email", validators=[DataRequired(), Email()])
+    text = wtforms.TextAreaField("Message text", validators=[DataRequired()])
+    submit = wtforms.SubmitField("Send")

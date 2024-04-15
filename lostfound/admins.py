@@ -1,5 +1,5 @@
 from lostfound import app, db, admin
-from lostfound.models import Post, User
+from lostfound.models import Post, User, FeedbackMessage
 from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 
@@ -11,3 +11,4 @@ class MyAdmin(ModelView):
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Post, db.session))
+admin.add_view(ModelView(FeedbackMessage, db.session))
