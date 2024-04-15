@@ -1,6 +1,6 @@
 from lostfound import app, db
 
-from flask import Flask, render_template, send_from_directory, redirect, url_for, flash
+from flask import Flask, render_template, send_from_directory, redirect, url_for, flash, make_response
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 
@@ -44,7 +44,15 @@ def register_page():
       db.session.add(user_to_create)
       db.session.commit()
       login_user(user_to_create)
-    return redirect(url_for('home_page'))
+
+    #set cookie
+    response = make_response(redirect(url_for('home_page')))
+    response.set_cookie('username', current_user.username)
+    response.set_cookie('logged_in', 'True')
+
+    return response
+
+    #return redirect(url_for('home_page'))
 
 
   if form.errors != {}: #If there are not errors from the validations
@@ -91,7 +99,15 @@ def login_page():
     if attempted_user and attempted_user.check_password(form.password.data):
         login_user(attempted_user)
         flash(f'Success! You are logged in as: {attempted_user.username}', category='success')
-        return redirect(url_for('home_page'))
+
+        #Set cookie for site
+        response = make_response(redirect(url_for('home_page')))
+        response.set_cookie('username', current_user.username)
+        response.set_cookie('logged_in', 'True')
+
+        return response
+
+        # return redirect(url_for('home_page'))
     else:
         flash('Username and password are not match! Please try again', category='danger')
 
@@ -102,7 +118,15 @@ def login_page():
 def logout_page():
     logout_user()
     flash("You have been logged out!", category='info')
-    return redirect(url_for("home_page"))
+
+    #Delete cookie
+    response = make_response(redirect(url_for("home_page")))
+    response.delete_cookie('username')
+    response.delete_cookie('logged_in')
+
+    return response
+
+    # return redirect(url_for("home_page"))
 
 @app.route('/contacts')
 def contacts_page():
